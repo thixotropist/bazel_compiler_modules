@@ -1,0 +1,7 @@
+{
+    "url": "file:///opt/bazel/bzlmod/tarballs/gcc_x86_64_suite-14.1.0.tar.xz",
+    "integrity": "sha256-GcfkjKfdaUHHUf5x0umfp0CQuucBA0Yst5w5OuAYutY=",
+    "strip_prefix": "",
+    "patches": [],
+    "patch_strip": 0
+}

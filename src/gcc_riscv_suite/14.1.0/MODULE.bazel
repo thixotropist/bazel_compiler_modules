@@ -1,0 +1,5 @@
+module(
+    name = "gcc_riscv_suite",
+    version = "14.1.0",
+)
+bazel_dep(name = "fedora_syslibs", version="40.0.0")

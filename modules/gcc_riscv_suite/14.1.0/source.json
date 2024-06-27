@@ -1,0 +1,7 @@
+{
+    "url": "file:///opt/bazel/bzlmod/tarballs/gcc_riscv_suite-14.1.0.tar.xz",
+    "integrity": "sha256-JUFSh6BSLyPzZ6aAzYXqLOU7ilvbyV2IerAf08jUR+M=",
+    "strip_prefix": "",
+    "patches": [],
+    "patch_strip": 0
+}

@@ -1,0 +1,7 @@
+{
+    "url": "file:///opt/bazel/bzlmod/tarballs/fedora_syslibs-40.0.0.tar.xz",
+    "integrity": "sha256-eFLZRhKwREOx4ndAZ1EZWIPWcmX2sNd64h2ZTwDvw8E=",
+    "strip_prefix": "",
+    "patches": [],
+    "patch_strip": 0
+}

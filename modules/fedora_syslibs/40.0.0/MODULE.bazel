@@ -1,0 +1,4 @@
+module(
+    name = "fedora_syslibs",
+    version = "40.0.0",
+)
