@@ -29,8 +29,10 @@ class Generator():
     """
     Convert a compiler suite installation directory into a Bazel module
     """
-    TARBALL_DIR = '/opt/bazel/bzlmod/tarballs'
-    MOD_SRC_BASE_DIR = '/opt/bazel/bzlmod/src'
+    BZLMOD_DIR = '/opt/bazel/bzlmod'
+    TARBALL_DIR = f'{BZLMOD_DIR}/tarballs'
+    MOD_SRC_BASE_DIR = f'{BZLMOD_DIR}/src'
+    MOD_DIR = f'{BZLMOD_DIR}/modules'
 
     def __init__(self, module_name, mod_version, build_target):
         """
@@ -38,7 +40,7 @@ class Generator():
         module_version will be something like '15.0.0'
         build_target will be something like 'riscv64-unknown-linux-gnu'
         """
-        self.module_name = module_name
+        self.mod_name = module_name
         self.mod_version = mod_version
         self.mod_src_dir = f'{self.MOD_SRC_BASE_DIR}/{module_name}/{mod_version}'
         self.build_target = build_target
@@ -57,7 +59,7 @@ class Generator():
         Remove all previously imported binary files
         """
         for sub in ('bin', 'lib', 'include', 'usr', 'lib64', 'libexec', self.build_target):
-            target_dir = f'{self.MOD_SRC_BASE_DIR}/{self.module_name}/{self.mod_version}/{sub}'
+            target_dir = f'{self.MOD_SRC_BASE_DIR}/{self.mod_name}/{self.mod_version}/{sub}'
             logger.info('Cleaning ' + target_dir)
             result = subprocess.run(['rm', '-rf', target_dir],
                 check=True, capture_output=True, encoding='utf8')
@@ -125,11 +127,11 @@ class Generator():
 
     def make_tarball(self):
         """
-        Create the tarball and compute the base64 checksum
+        Create the tarball and update the base64 checksum in the associated source.json file
         """
         logger.info('Generating tarball - this will take a while')
-        tarball_name = f'{self.TARBALL_DIR}/{self.module_name}-{self.mod_version}.tar.xz'
-        result = subprocess.run(f'cd {self.mod_src_dir} && tar cJf {self.TARBALL_DIR}/{self.module_name}-{self.mod_version}.tar.xz .',
+        tarball_name = f'{self.TARBALL_DIR}/{self.mod_name}-{self.mod_version}.tar.xz'
+        result = subprocess.run(f'cd {self.mod_src_dir} && tar cJf {self.TARBALL_DIR}/{self.mod_name}-{self.mod_version}.tar.xz .',
                     shell=True, check=True, capture_output=True, encoding='utf8')
         if result.returncode != 0:
             logger.error('tarball generation failed: ' + result.stderr)
@@ -141,5 +143,17 @@ class Generator():
             logger.error('digest generation failed: ' + result.stderr)
             sys.exit()
         logger.info('generated sha256 digest ' + result.stdout)
-        self.digest = result.stdout.strip()
-        return self.digest
+        digest = result.stdout.strip()
+
+        source_file = f"""{{
+    "url": "file://{tarball_name}",
+    "integrity": "sha256-{digest}",
+    "strip_prefix": "",
+    "patches": [],
+    "patch_strip": 0
+}}
+"""
+        with open(f'{self.MOD_DIR}/{self.mod_name}/{self.mod_version}/source.json', 'w', encoding='utf8') as sf:
+            sf.write(source_file)
+        logger.info('updated module source.json with new digest ' + digest)
+
