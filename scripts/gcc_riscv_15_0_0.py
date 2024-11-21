@@ -13,6 +13,7 @@ RSYNC_FILES= f"""
 + usr
 + usr/include
 + usr/include/**
+- usr/lib
 + include
 + include/**
 
@@ -144,10 +145,9 @@ libexec/gcc/{MOD_TARGET}/{MOD_VERSION}/g++-mapper-server
 """
 
 STRIP_TARGET_FILES = f"""lib/libm.so.6
-usr/lib/libc.so.6
+lib/libc.so.6
 lib/libpthread.so.0
 lib/libgcc_s.so.1
-{MOD_TARGET}/lib64/libc.so.6
 {MOD_TARGET}/lib/libgcc_s.so.1
 {MOD_TARGET}/lib/libasan.so.8.0.0
 {MOD_TARGET}/lib/libatomic.so.1.2.0

@@ -19,6 +19,7 @@ The overall procedure is something like
 
 """
 import sys
+import os
 import subprocess
 import tempfile
 import logging
@@ -81,6 +82,7 @@ class Generator():
                                      f'{src_dir}/',
                                      f'{self.mod_src_dir}/'],
                     check=True, capture_output=True, encoding='utf8')
+            print(result.stdout)
             if result.returncode != 0:
                 logger.error('rsync import failed: ' + result.stderr)
                 sys.exit()
@@ -129,8 +131,10 @@ class Generator():
         """
         Create the tarball and update the base64 checksum in the associated source.json file
         """
-        logger.info('Generating tarball - this will take a while')
         tarball_name = f'{self.TARBALL_DIR}/{self.mod_name}-{self.mod_version}.tar.xz'
+        logger.info("Removing previous tarball")
+        os.remove(tarball_name)
+        logger.info('Generating tarball - this will take a while')
         result = subprocess.run(f'cd {self.mod_src_dir} && tar cJf {self.TARBALL_DIR}/{self.mod_name}-{self.mod_version}.tar.xz .',
                     shell=True, check=True, capture_output=True, encoding='utf8')
         if result.returncode != 0:

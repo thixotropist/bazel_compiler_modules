@@ -387,6 +387,21 @@ $ make
 $ make install
 ```
 
+### glibc for riscv
+
+```console 
+ $ cd /home2/build/riscvx/glibc
+ ../../vendor/glibc/configure riscv64-unknown-linux-gnu \
+ CC=/opt/riscvx/sysroot/bin/riscv64-unknown-linux-gnu-gcc \
+ LD=/opt/riscvx/sysroot/bin/riscv64-unknown-linux-gnu-ld \
+ AR=/opt/riscvx/sysroot/bin/riscv64-unknown-linux-gnu-ar \
+ --prefix=/opt/riscvx/sysroot \
+ --with-headers=/opt/riscvx/sysroot/usr/include \
+ --disable-multilib
+ $ make
+ $ make install
+ ```
+
 ### cleanup
 
 First look for any loader scripts which use absolute paths rather than relative paths.
@@ -418,3 +433,44 @@ $ cat sysroot/lib/libc.so
 OUTPUT_FORMAT(elf64-x86-64)
 GROUP ( ./libc.so.6 ./libc_nonshared.a  AS_NEEDED ( ./ld-linux-x86-64.so.2 ) )
 ```
+
+## Repeat for riscv
+
+### configuration
+
+Binutils:
+
+```console
+$ /home2/vendor/binutils-gdb/configure --prefix=/opt/riscvx/sysroot --with-sysroot=/opt/riscvx/sysroot --target=riscv64-unknown-linux-gnu
+```
+
+gcc:
+
+```console
+$ ../../vendor/glibc/configure --prefix=/opt/riscvx/sysroot --target=riscv64-unknown-linux-gnu --with-headers=/opt/riscvx/sysroot/usr/include --disable-multilib
+```
+
+glibc:
+
+```console
+$ ../../vendor/glibc/configure riscv64-unknown-linux-gnu CC=/opt/riscvx/sysroot/bin/riscv64-unknown-linux-gnu-gcc LD=/opt/riscvx/sysroot/bin/riscv64-unknown-linux-gnu-ld AR=/opt/riscvx/sysroot/bin/riscv64-unknown-linux-gnu-ar --prefix=/opt/riscvx/sysroot --with-headers=/opt/riscvx/sysroot/usr/include --disable-multilib
+```
+
+### cleanup
+
+Find any `*.so` loader script files using absolute paths, and convert them to relative paths as for the x86_example.
+
+Next look for any sysroot bootstrap files that may not have been replaced during the installation.
+Use `find` to locate any crt*.o or libc.so* files that may remain from the bootstrap.
+
+You can screen for some compiled files remaining from the bootstrap sysroot by checking a newly built and linked
+executable for earlier GCC tags:
+
+```console
+$ strings riscv64/exemplars/whisper_cpp_vector|grep GCC
+GCC_3.0
+GCC: (GNU) 15.0.0 20240620 (experimental)
+_Unwind_Resume@GCC_3.0
+```
+
+If any references like `GCC: (GNU) 14.1.0` exist, that likely means a sysroot file like `crt1.o` remains from the bootstrap.
