@@ -22,23 +22,31 @@ import sys
 import os
 import subprocess
 import tempfile
+import shutil
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging
 
 class Generator():
     """
-    Convert a compiler suite installation directory into a Bazel module
+    Convert a compiler suite installation directory into a Bazel module,
+    then publish the module in a local file system
     """
+    # the directory used as a local module repository
     BZLMOD_DIR = '/opt/bazel/bzlmod'
+    # tarballs go here
     TARBALL_DIR = f'{BZLMOD_DIR}/tarballs'
+    # source directory for the tarball, to contain
+    # the toolsuite, dependencies, and the bazel BUILD files
     MOD_SRC_BASE_DIR = f'{BZLMOD_DIR}/src'
+    # packaged modules go here
     MOD_DIR = f'{BZLMOD_DIR}/modules'
 
     def __init__(self, module_name, mod_version, build_target):
         """
-        module_name will be something like 'gcc_riscv_suite'
-        module_version will be something like '15.0.0'
+        module_name will be something like 'gcc_riscv_suite'.
+        module_version will be something like '15.0.0.x', with the gcc suite version
+        number suffixed ith the module patch number
         build_target will be something like 'riscv64-unknown-linux-gnu'
         """
         self.mod_name = module_name
@@ -57,7 +65,7 @@ class Generator():
 
     def clean_mod_src(self):
         """
-        Remove all previously imported binary files
+        Remove all previously imported binary and bazel files
         """
         for sub in ('bin', 'lib', 'include', 'usr', 'lib64', 'libexec', self.build_target):
             target_dir = f'{self.MOD_SRC_BASE_DIR}/{self.mod_name}/{self.mod_version}/{sub}'
@@ -68,6 +76,12 @@ class Generator():
                 logger.error('removal of existing files failed: ' + result.stderr)
                 sys.exit()
             logger.info('cleaned ' + sub)
+        for f in ('BUILD', 'MODULE.bazel'):
+            result = subprocess.run(['rm', '-rf', f],
+                check=True, capture_output=True, encoding='utf8')
+            if result.returncode != 0:
+                logger.error('removal of existing file failed: ' + result.stderr)
+                sys.exit()
 
     def rsync_to_mod_src(self, src_dir, rsync_data):
         """
@@ -87,6 +101,16 @@ class Generator():
                 logger.error('rsync import failed: ' + result.stderr)
                 sys.exit()
             logger.info('selectively imported ' + src_dir + ' into ' + self.mod_src_dir)
+
+
+    def copy_bazel_files(self):
+        """
+        copy two bazel files into the tarball directory
+        """
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        src_dir = f"{script_dir}/../src/{self.mod_name}/{self.mod_version}"
+        shutil.copy(src_dir + "/BUILD", self.mod_src_dir + "/BUILD")
+        shutil.copy(src_dir + "/MODULE.bazel", self.mod_src_dir + "/MODULE.bazel")
 
     def remove_duplicates(self):
         """
@@ -132,8 +156,9 @@ class Generator():
         Create the tarball and update the base64 checksum in the associated source.json file
         """
         tarball_name = f'{self.TARBALL_DIR}/{self.mod_name}-{self.mod_version}.tar.xz'
-        logger.info("Removing previous tarball")
-        os.remove(tarball_name)
+        if os.path.exists(tarball_name):
+            logger.info("Removing previous tarball")
+            os.remove(tarball_name)
         logger.info('Generating tarball - this will take a while')
         result = subprocess.run(f'cd {self.mod_src_dir} && tar cJf {self.TARBALL_DIR}/{self.mod_name}-{self.mod_version}.tar.xz .',
                     shell=True, check=True, capture_output=True, encoding='utf8')
@@ -157,6 +182,8 @@ class Generator():
     "patch_strip": 0
 }}
 """
+        if not os.path.exists(f'{self.MOD_DIR}/{self.mod_name}/{self.mod_version}'):
+            os.mkdir(f'{self.MOD_DIR}/{self.mod_name}/{self.mod_version}')
         with open(f'{self.MOD_DIR}/{self.mod_name}/{self.mod_version}/source.json', 'w', encoding='utf8') as sf:
             sf.write(source_file)
         logger.info('updated module source.json with new digest ' + digest)
