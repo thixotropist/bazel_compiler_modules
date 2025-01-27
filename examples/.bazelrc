@@ -1,0 +1,15 @@
+# Global Bazel flags
+# Generate all Bazel artifacts in a RAM tmpfs owned by the user, in this case UID 1000
+# This does not include imported packages
+startup --output_base=/run/user/1000/bazel
+
+# Enable toolchain resolution explicitly, since we only have C and C++ Linux targets on Linux, no MacOS or Android
+build --incompatible_enable_cc_toolchain_resolution 
+# Allow for local caching of imported packages
+build --distdir=/opt/bazel/distdir
+# Add global registry
+common --registry https://bcr.bazel.build
+# Add local registry
+common --registry file:///opt/bazel/bzlmod
+# Workaround a hermeticity bug
+build --incompatible_sandbox_hermetic_tmp=false

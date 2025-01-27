@@ -1,0 +1,5 @@
+module(
+    name = "gcc_x86_64_suite",
+    version = "15.0.1.0",
+)
+bazel_dep(name = "fedora_syslibs", version="41.0.1")

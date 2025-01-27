@@ -1,5 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
+GCC_VERSION = "15.0.1"
+
 # Assign names to different crosscompiler components
 
 filegroup(
@@ -9,17 +11,17 @@ filegroup(
 
 filegroup(
     name = "libexec",
-    srcs = glob(["libexec/gcc/riscv64-unknown-linux-gnu/15.0.0/**"]),
+    srcs = glob(["libexec/gcc/riscv64-unknown-linux-gnu/{}/**".format(GCC_VERSION)]),
 )
 
 filegroup(
     name = "lib",
-    srcs = glob(["lib/gcc/riscv64-unknown-linux-gnu/15.0.0/**"]),
+    srcs = glob(["lib/gcc/riscv64-unknown-linux-gnu/{}/**".format(GCC_VERSION)]),
 )
 
 filegroup(
     name = "c++_std_includes",
-    srcs = glob(["riscv64-unknown-linux-gnu/include/c++/15.0.0/**"]),
+    srcs = glob(["riscv64-unknown-linux-gnu/include/c++/{}/**".format(GCC_VERSION)]),
 )
 
 filegroup(
@@ -33,8 +35,8 @@ filegroup(
         "bin/riscv64-unknown-linux-gnu-ld.bfd",
         "bin/riscv64-unknown-linux-gnu-objdump",
         "bin/riscv64-unknown-linux-gnu-ranlib",
-        "bin/riscv64-unknown-linux-gnu-strip",
         "bin/riscv64-unknown-linux-gnu-readelf",
+        "bin/riscv64-unknown-linux-gnu-strip",
         ":c++_std_includes",
         ":lib",
         ":libexec",
