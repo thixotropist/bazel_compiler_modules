@@ -34,35 +34,17 @@ RSYNC_FILES= f"""
 + bin/{TARGET_PREFIX}gcc-ar
 + bin/{TARGET_PREFIX}gcc-nm
 + bin/{TARGET_PREFIX}gcc-ranlib
-+ bin/{TARGET_PREFIX}gcore
-+ bin/{TARGET_PREFIX}iconv
 + bin/{TARGET_PREFIX}ld
 + bin/{TARGET_PREFIX}ld.bfd
 + bin/{TARGET_PREFIX}ldd
-+ bin/{TARGET_PREFIX}ld.so
-+ bin/{TARGET_PREFIX}locale
-+ bin/{TARGET_PREFIX}localdef
-+ bin/{TARGET_PREFIX}makedb
-+ bin/{TARGET_PREFIX}mtrace
 + bin/{TARGET_PREFIX}nm
 + bin/{TARGET_PREFIX}objcopy
 + bin/{TARGET_PREFIX}objdump
-+ bin/{TARGET_PREFIX}pldd
 + bin/{TARGET_PREFIX}ranlib
 + bin/{TARGET_PREFIX}readelf
 + bin/{TARGET_PREFIX}size
-+ bin/{TARGET_PREFIX}sotruss
 + bin/{TARGET_PREFIX}strings
 + bin/{TARGET_PREFIX}strip
-+ bin/{TARGET_PREFIX}tzselect
-+ bin/{MOD_TARGET}-c++
-+ bin/{MOD_TARGET}-g++
-+ bin/{MOD_TARGET}-gcc
-+ bin/{MOD_TARGET}-gcc-ar
-+ bin/{MOD_TARGET}-gcc-nm
-+ bin/{MOD_TARGET}-gcc-ranlib
-+ bin/xtrace
-+ bin/zdump
 
 # lib and lib64 exclude most .a files
 + lib
@@ -78,7 +60,6 @@ RSYNC_FILES= f"""
 
 # lib64, excluding compiler support libraries and .a archives
 + lib64
-+ lib64/libc_nonshared.a
 - lib64/lib*.a
 - lib64/libgomp.*
 - lib64/libitm.*
@@ -140,6 +121,8 @@ RSYNC_FILES= f"""
 + {MOD_TARGET}/include/c++
 + {MOD_TARGET}/include/c++/{GCC_VERSION}
 + {MOD_TARGET}/include/c++/{GCC_VERSION}/**
++ {MOD_TARGET}/sys-include
++ {MOD_TARGET}/sys-include/**
 
 # skip everything else
 - **
@@ -156,32 +139,20 @@ bin/{TARGET_PREFIX}gcc
 bin/{TARGET_PREFIX}gcc-ar
 bin/{TARGET_PREFIX}gcc-nm
 bin/{TARGET_PREFIX}gcc-ranlib
-bin/{TARGET_PREFIX}iconv
 bin/{TARGET_PREFIX}ld
 bin/{TARGET_PREFIX}ld.bfd
-bin/{TARGET_PREFIX}locale
-bin/{TARGET_PREFIX}makedb
 bin/{TARGET_PREFIX}nm
 bin/{TARGET_PREFIX}objcopy
 bin/{TARGET_PREFIX}objdump
-bin/{TARGET_PREFIX}pldd
 bin/{TARGET_PREFIX}ranlib
 bin/{TARGET_PREFIX}readelf
 bin/{TARGET_PREFIX}size
 bin/{TARGET_PREFIX}strings
 bin/{TARGET_PREFIX}strip
-bin/{TARGET_PREFIX}zdump
-bin/{MOD_TARGET}-c++
-bin/{MOD_TARGET}-g++
-bin/{MOD_TARGET}-gcc
-bin/{MOD_TARGET}-gcc-ar
-bin/{MOD_TARGET}-gcc-nm
-bin/{MOD_TARGET}-gcc-ranlib
 lib/gcc/{MOD_TARGET}/{GCC_VERSION}/plugin/libcc1plugin.so.0.0.0
 lib/gcc/{MOD_TARGET}/{GCC_VERSION}/plugin/libcp1plugin.so.0.0.0
 lib/libinproctrace.so
 lib/libmvec.so.1
-lib/ld-linux-x86-64.so.2
 lib/libanl.so.1
 lib/libBrokenLocale.so.1
 lib/libc_malloc_debug.so.0
@@ -198,6 +169,7 @@ lib/libresolv.so.2
 lib/librt.so.1
 lib/libthread_db.so.1
 lib/libutil.so.1
+lib64/ld-linux-x86-64.so.2
 lib64/libasan.so.8.0.0
 lib64/libatomic.so.1.2.0
 lib64/libcc1.so.0.0.0

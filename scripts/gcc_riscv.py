@@ -49,6 +49,7 @@ RSYNC_FILES= f"""
 # lib and lib64 exclude most .a files
 + lib
 + lib/libc_nonshared.a
++ lib/ld-linux-riscv64-lp64d.so.1
 - lib/lib*.a
 + lib/gcc
 + lib/gcc/{MOD_TARGET}
@@ -113,6 +114,8 @@ RSYNC_FILES= f"""
 + {MOD_TARGET}/include/c++
 + {MOD_TARGET}/include/c++/{GCC_VERSION}
 + {MOD_TARGET}/include/c++/{GCC_VERSION}/**
++ {MOD_TARGET}/sys-include
++ {MOD_TARGET}/sys-include/**
 
 # skip everything else
 - **

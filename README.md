@@ -26,6 +26,8 @@ It takes several steps to generate each Bazel crosscompiler toolchain:
 7. Test the new modules to verify all desired files are present and nothing references host directories like `/usr/` or `/opt/riscv64`.
    This is usually an iterative process, especially making sure that all of the obscure files needed by the linker/loader are present
    and on a relative file path.
+8. Move the installation directory `/opt/riscv/` to `/opt/riscv_save` and `/opt/x86_64/` to `/opt/x86_64_save` before exercising the new
+   modules within Bazel.  This helps test hermeticity, so that `bazel build` can never directly use the local compiler suite components.
 
 ## update the source directories
 
@@ -38,6 +40,8 @@ $ git status
 $ git remote -v
 origin	https://sourceware.org/git/binutils-gdb.git (fetch)
 $ git pull
+# select the most recent release
+$ git checkout binutils-2_44
 $ cd ../gcc
 $ git status
 $ git remote -v
@@ -74,6 +78,8 @@ $ mkdir -p binutils gcc glibc
 ```console
 $ mkdir -p /opt/x86_64/sysroot
 ```
+
+## configure, build, and install
 
 ### binutils needs to be first
 
@@ -318,7 +324,6 @@ $ riscv/sysroot/bin/riscv64-unknown-linux-gnu-gcc --version
 riscv64-unknown-linux-gnu-gcc (GCC) 15.0.1 20250122 (experimental)
 ...
 ```
-
 
 ### Pruning sysroot
 
