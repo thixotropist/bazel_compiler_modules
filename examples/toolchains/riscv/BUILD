@@ -29,6 +29,14 @@ filegroup(
     srcs = [],
 )
 
+filegroup(
+    name = "gcc_riscv_objdump",
+    srcs =
+        [
+            "gcc/wrappers/objdump",
+        ],
+)
+
 # Most compiler and linker actions depend on an imported gcc, local wrappers, and loader scripts
 filegroup(
     name = "gcc_riscv64_compiler_files",
@@ -48,7 +56,9 @@ cc_toolchain(
     compiler_files = ":gcc_riscv64_compiler_files",
     dwp_files = ":empty",
     linker_files = ":gcc_riscv64_compiler_files",
-    objcopy_files = ":empty",
+    as_files = ":gcc_riscv64_compiler_files",
+    ar_files = ":gcc_riscv64_compiler_files",
+    objcopy_files = ":gcc_riscv64_compiler_files",
     strip_files = ":gcc_riscv64_compiler_files",
     supports_param_files = 0,
     toolchain_config = ":riscv64-rva23-gcc-config",
