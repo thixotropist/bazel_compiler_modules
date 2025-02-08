@@ -115,6 +115,48 @@ def _impl(ctx):
     ]
     opt_feature = feature(name = "opt")
     dbg_feature = feature(name = "dbg")
+    supports_pic_feature = feature(
+        name = "supports_pic",
+        enabled = True,
+    )
+    pic_feature = feature(
+        name = "pic",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = [
+                    ACTION_NAMES.assemble,
+                    ACTION_NAMES.preprocess_assemble,
+                    ACTION_NAMES.linkstamp_compile,
+                    ACTION_NAMES.c_compile,
+                    ACTION_NAMES.cpp_compile,
+                    ACTION_NAMES.cpp_module_codegen,
+                    ACTION_NAMES.cpp_module_compile,
+                ],
+                flag_groups = [
+                    flag_group(flags = ["-fPIC"], expand_if_available = "pic"),
+                ],
+            ),
+        ],
+    )
+    force_pic_flags_feature = feature(
+        name = "force_pic_flags",
+        flag_sets = [
+            flag_set(
+                actions = [
+                    ACTION_NAMES.cpp_link_executable,
+                    ACTION_NAMES.lto_index_for_executable,
+                ],
+                flag_groups = [
+                    flag_group(
+                        flags = ["-pie"],
+                        expand_if_available = "force_pic",
+                    ),
+                ],
+            ),
+        ],
+    )
+
     features = [
         feature(
             name = "default_compile_flags",
@@ -125,6 +167,7 @@ def _impl(ctx):
                     flag_groups = ([
                         flag_group(
                             flags = SYSTEM_INCLUDE_FLAGS + [
+                                "-march=" + ctx.attr.march,
                                 "-no-canonical-prefixes",
                                 "-fno-canonical-system-headers",
                                 "-Wno-builtin-macro-redefined",
@@ -182,6 +225,8 @@ def _impl(ctx):
         ),
         opt_feature,
         dbg_feature,
+        supports_pic_feature,
+        force_pic_flags_feature,
         feature(
             name = "default_link_flags",
             enabled = True,
@@ -193,6 +238,7 @@ def _impl(ctx):
                             flags = [
                                 "-Wl,-Ttoolchains/x86/gcc/elf_x86_64.xce",
                                 "-Wl,-lstdc++",
+                                "-Wl,-lm",
                                 "-Wl,-z,relro,-z,now",
                                 "-no-canonical-prefixes",
                                 "-pass-exit-codes",
@@ -226,6 +272,9 @@ def _impl(ctx):
 
 cc_toolchain_config = rule(
     implementation = _impl,
-    attrs = {},
+    # allow the machine architecture to be a named attribute of this rule
+    attrs = {
+        "march": attr.string(default='native'),
+    },
     provides = [CcToolchainConfigInfo],
 )

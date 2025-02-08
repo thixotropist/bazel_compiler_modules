@@ -37,6 +37,8 @@ filegroup(
         "lib/libc.so.6",
         "lib/libm.so",
         "lib/libm.so.6",
+	"lib/libmvec.so",
+	"lib/libmvec.so.1",
         "lib/libc_nonshared.a",
         "lib64/ld-linux-x86-64.so.2",
         TARGET_LIB_DIR + "libgcc_s.so",

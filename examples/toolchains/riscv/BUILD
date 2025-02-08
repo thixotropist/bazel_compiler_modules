@@ -47,8 +47,12 @@ filegroup(
             "@gcc_riscv_suite//:compiler_files",
         ],
 )
-
-cc_toolchain_config(name = "riscv64-rva23-gcc-config")
+# The toolchain configuration uses a slightly customized rule allowing for
+# multiple machine architecture toolchain definitions
+cc_toolchain_config(
+    name = "riscv64-rva23-gcc-config",
+    march = "rv64gcv_zfhmin_zvfhmin_zvbb_zicond_zimop_zcmop_zcb_zfa_zawrs_zvkng_zvksg",
+)
 
 cc_toolchain(
     name = "riscv64-rva23-gcc",

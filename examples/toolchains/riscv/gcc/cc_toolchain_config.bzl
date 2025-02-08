@@ -167,7 +167,7 @@ def _impl(ctx):
                     flag_groups = ([
                         flag_group(
                             flags = SYSTEM_INCLUDE_FLAGS + [
-                                "-march=rv64gcv_zfhmin_zvfhmin_zvbb_zicond_zimop_zcmop_zcb_zfa_zawrs_zvkng_zvksg",
+                                "-march=" + ctx.attr.march,
                                 "-no-canonical-prefixes",
                                 "-fno-canonical-system-headers",
                                 "-Wno-builtin-macro-redefined",
@@ -238,6 +238,7 @@ def _impl(ctx):
                             flags = [
                                 "-Wl,-Ttoolchains/riscv/gcc/elf64lriscv.xc",
                                 "-Wl,-lstdc++",
+                                "-Wl,-lm",
                                 "-Wl,-z,relro,-z,now",
                                 "-no-canonical-prefixes",
                                 "-pass-exit-codes",
@@ -271,6 +272,9 @@ def _impl(ctx):
 
 cc_toolchain_config = rule(
     implementation = _impl,
-    attrs = {},
+    # allow the machine architecture to be a named attribute of this rule
+    attrs = {
+        "march": attr.string(default='rv64gcv'),
+    },
     provides = [CcToolchainConfigInfo],
 )
