@@ -7,10 +7,10 @@ package(default_visibility = ["//visibility:public"])
 SUITE_MODULE = "gcc_riscv_suite"
 
 # This is the gcc version, not the bazel gcc_riscv_suite module version
-SUITE_VERSION = "15.0.1"
+SUITE_VERSION = "15.2.0"
 
 # the binutils, gcc, and glibc configuration target
-SUITE_TARGET = "riscv64-unknown-linux-gnu"
+SUITE_TARGET = "riscv64-linux-gnu"
 
 # Bazel currently makes the imported module available at this file system location
 PATH_TO_MODULE = OUTPUT_BASE + "/external/" + SUITE_MODULE + "+"

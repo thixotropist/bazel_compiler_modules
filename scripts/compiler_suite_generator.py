@@ -94,7 +94,7 @@ class Generator():
     def rsync_to_mod_src(self, src_dir, rsync_data):
         """
         Add selected files to the module
-        -ravH --include-from=files --delete src_dir/ mod_src_dir/
+        rsync -ravH --include-from=file src_dir/ mod_src_dir/
         """
         with tempfile.NamedTemporaryFile(mode="w", encoding="utf8", delete_on_close=False) as fp:
             fp.write(rsync_data)

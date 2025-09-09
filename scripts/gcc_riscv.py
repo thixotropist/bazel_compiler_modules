@@ -3,19 +3,21 @@
 Convert a riscv compiler suite into a Bazel module
 """
 from compiler_suite_generator import Generator
+import os
 
 MOD_NAME = "gcc_riscv_suite"
-MOD_VERSION = "15.0.1.0"
-GCC_VERSION = "15.0.1"
-MOD_TARGET = "riscv64-unknown-linux-gnu"
+MOD_VERSION = "15.2.0.0"
+GCC_VERSION = "15.2.0"
+MOD_TARGET = "riscv64-linux-gnu"
 # crosscompilers often need a prefix, native compilers often don't
-TARGET_PREFIX = "riscv64-unknown-linux-gnu-"
+TARGET_PREFIX = "riscv64-linux-gnu-"
 
 RSYNC_FILES= f"""
 # Include files
 + usr
 + usr/include
 + usr/include/**
+- usr/**
 + include
 + include/**
 
@@ -45,6 +47,7 @@ RSYNC_FILES= f"""
 + bin/{TARGET_PREFIX}size
 + bin/{TARGET_PREFIX}strings
 + bin/{TARGET_PREFIX}strip
+- bin/**
 
 # lib and lib64 exclude most .a files
 + lib
@@ -57,6 +60,8 @@ RSYNC_FILES= f"""
 + lib/gcc/{MOD_TARGET}/{GCC_VERSION}/libgcc*.a
 - lib/gcc/{MOD_TARGET}/{GCC_VERSION}/lib*.a
 + lib/gcc/{MOD_TARGET}/{GCC_VERSION}/**
+- lib/gconv/**
+- lib/gprofng/**
 + lib/**
 
 # lib64, excluding compiler support libraries and .a archives
@@ -71,19 +76,10 @@ RSYNC_FILES= f"""
 - libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/lto1
 - libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/lto-wrapper
 + libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/**
+- libexec/**
 
 + {MOD_TARGET}
 + {MOD_TARGET}/bin
-+ {MOD_TARGET}/bin/ar
-+ {MOD_TARGET}/bin/as
-+ {MOD_TARGET}/bin/ld
-+ {MOD_TARGET}/bin/ld.bfd
-+ {MOD_TARGET}/bin/nm
-+ {MOD_TARGET}/bin/objcopy
-+ {MOD_TARGET}/bin/objdump
-+ {MOD_TARGET}/bin/ranlib
-+ {MOD_TARGET}/bin/readelf
-+ {MOD_TARGET}/bin/strip
 + {MOD_TARGET}/lib
 + {MOD_TARGET}/lib/libasan.so
 + {MOD_TARGET}/lib/libasan.so.8
@@ -116,6 +112,7 @@ RSYNC_FILES= f"""
 + {MOD_TARGET}/include/c++/{GCC_VERSION}/**
 + {MOD_TARGET}/sys-include
 + {MOD_TARGET}/sys-include/**
+- {MOD_TARGET}/**
 
 # skip everything else
 - **
@@ -150,21 +147,11 @@ libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/cc1
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/cc1plus
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/collect2
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/g++-mapper-server
-{MOD_TARGET}/bin/ar
-{MOD_TARGET}/bin/as
-{MOD_TARGET}/bin/ld
-{MOD_TARGET}/bin/ld.bfd
-{MOD_TARGET}/bin/objcopy
-{MOD_TARGET}/bin/objdump
-{MOD_TARGET}/bin/ranlib
-{MOD_TARGET}/bin/readelf
-{MOD_TARGET}/bin/strip
 """
 
 STRIP_TARGET_FILES = f"""lib/libm.so.6
 lib/libc.so.6
 lib/libpthread.so.0
-lib/libgcc_s.so.1
 {MOD_TARGET}/lib/libgcc_s.so.1
 {MOD_TARGET}/lib/libasan.so.8.0.0
 {MOD_TARGET}/lib/libatomic.so.1.2.0
@@ -176,11 +163,20 @@ lib/libgcc_s.so.1
 """
 
 generator = Generator(MOD_NAME, MOD_VERSION, MOD_TARGET)
-generator.set_target_prefix("/opt/riscv/sysroot/bin/riscv64-unknown-linux-gnu-")
+generator.set_target_prefix(f"/opt/riscv/sysroot/bin/{TARGET_PREFIX}")
 generator.clean_mod_src()
 generator.rsync_to_mod_src("/opt/riscv/sysroot", RSYNC_FILES)
 generator.copy_bazel_files()
 generator.strip_binaries(STRIP_FILES)
 generator.strip_target_binaries(STRIP_TARGET_FILES)
 generator.remove_duplicates()
+# add some links to match this version of gcc's search path for cpp, as, collect2, and ld
+# gcc first looks for the assembler and linker at libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/
+FILES=f"src/{MOD_NAME}"
+for file in ('as', 'ar', 'ld', 'cpp', 'nm', 'ranlib', 'strip'):
+    src = f"{FILES}/bin/{MOD_TARGET}-{file}"
+    dst = f"{FILES}/libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/{file}"
+    os.link(src, dst)
+    print(f"Added a hard link from binutils utility into the GCC search path:\n\t{src}⇒ {dst}")
+
 generator.make_tarball()

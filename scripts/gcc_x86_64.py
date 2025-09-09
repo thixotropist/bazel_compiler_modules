@@ -5,8 +5,8 @@ Convert an x86_64 compiler suite into a Bazel module
 from compiler_suite_generator import Generator
 
 MOD_NAME = "gcc_x86_64_suite"
-MOD_VERSION = "15.0.1.0"
-GCC_VERSION = "15.0.1"
+MOD_VERSION = "15.2.0.0"
+GCC_VERSION = "15.2.0"
 MOD_TARGET = "x86_64-pc-linux-gnu"
 # crosscompilers often need a prefix, native compilers often don't
 TARGET_PREFIX = ""
@@ -16,6 +16,8 @@ RSYNC_FILES= f"""
 + usr
 + usr/include
 + usr/include/**
+
+- usr/**
 + include
 + include/**
 
@@ -45,17 +47,21 @@ RSYNC_FILES= f"""
 + bin/{TARGET_PREFIX}size
 + bin/{TARGET_PREFIX}strings
 + bin/{TARGET_PREFIX}strip
+- bin/**
 
 # lib and lib64 exclude most .a files
 + lib
 + lib/libc_nonshared.a
 - lib/lib*.a
++ lib/ld-linux-x86-64.so.2
 + lib/gcc
 + lib/gcc/{MOD_TARGET}
 + lib/gcc/{MOD_TARGET}/{GCC_VERSION}
 + lib/gcc/{MOD_TARGET}/{GCC_VERSION}/libgcc*.a
 - lib/gcc/{MOD_TARGET}/{GCC_VERSION}/lib*.a
 + lib/gcc/{MOD_TARGET}/{GCC_VERSION}/**
+- lib/gconv/**
+- lib/gprofng/**
 + lib/**
 
 # lib64, excluding compiler support libraries and .a archives
@@ -67,7 +73,6 @@ RSYNC_FILES= f"""
 + lib64/**
 
 + usr/lib
-- usr/lib/libpthread.so.0
 + usr/lib/**
 
 # libexec other files needed by the compiler toolchain
@@ -169,7 +174,7 @@ lib/libresolv.so.2
 lib/librt.so.1
 lib/libthread_db.so.1
 lib/libutil.so.1
-lib64/ld-linux-x86-64.so.2
+lib/ld-linux-x86-64.so.2
 lib64/libasan.so.8.0.0
 lib64/libatomic.so.1.2.0
 lib64/libcc1.so.0.0.0

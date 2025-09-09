@@ -281,7 +281,7 @@ Push into the sandbox and run this command using `strace -f`.  We want to know t
  <unfinished ...>
 [pid 368480] rt_sigprocmask(SIG_BLOCK, NULL, ~[KILL STOP], 8) = 0
 [pid 368480] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
-[pid 368480] execve("/home/gary/.local/bin/as", ["as", "--traditional-format", "-march=rv64gcv_zfhmin_zvfhmin_zv"..., "-march=rv64imafdcv_zicond_zicsr_"..., "-mabi=lp64d", "-misa-spec=20191213", "-o", "bazel-out/k8-fastbuild/bin/_objs"..., "/tmp/cc8eYW3a.s"], 0xe0f6990 /* 61 vars */) = -1 ENOENT (No such file or directo
+[pid 368480] execve("/home/thixotropist/.local/bin/as", ["as", "--traditional-format", "-march=rv64gcv_zfhmin_zvfhmin_zv"..., "-march=rv64imafdcv_zicond_zicsr_"..., "-mabi=lp64d", "-misa-spec=20191213", "-o", "bazel-out/k8-fastbuild/bin/_objs"..., "/tmp/cc8eYW3a.s"], 0xe0f6990 /* 61 vars */) = -1 ENOENT (No such file or directo
 ry)
 [pid 368480] execve("/usr/local/bin/as", ["as", "--traditional-format", "-march=rv64gcv_zfhmin_zvfhmin_zv"..., "-march=rv64imafdcv_zicond_zicsr_"..., "-mabi=lp64d", "-misa-spec=20191213", "-o", "bazel-out/k8-fastbuild/bin/_objs"..., "/tmp/cc8eYW3a.s"], 0xe0f6990 /* 61 vars */) = -1 ENOENT (No such file or directory)
 [pid 368480] execve("/usr/local/sbin/as", ["as", "--traditional-format", "-march=rv64gcv_zfhmin_zvfhmin_zv"..., "-march=rv64imafdcv_zicond_zicsr_"..., "-mabi=lp64d", "-misa-spec=20191213", "-o", "bazel-out/k8-fastbuild/bin/_objs"..., "/tmp/cc8eYW3a.s"], 0xe0f6990 /* 61 vars */) = -1 ENOENT (No such file or directory)
@@ -393,7 +393,7 @@ SUBCOMMAND: # //:helloworld [action 'Linking helloworld'
 ...
 toolchains/x86/gcc/wrappers/gcc -o bazel-out/k8-fastbuild/bin/helloworld bazel-out/k8-fastbuild/bin/_objs/helloworld/helloworld.o -Wl,-S -Wl,-Ttoolchains/x86/gcc/elf_x86_64.xce -Wl,-lstdc++ -Wl,-z,relro,-z,now -no-canonical-prefixes -pass-exit-codes
 ...
-ERROR: /home/gary/projects/github/bazel_compiler_modules/examples/BUILD:3:10: Linking helloworld failed: (Exit 1): linux-sandbox failed: error executing CppLink command 
+ERROR: /home/thixotropist/projects/github/bazel_compiler_modules/examples/BUILD:3:10: Linking helloworld failed: (Exit 1): linux-sandbox failed: error executing CppLink command 
 /usr/bin/ld: bazel-out/k8-fastbuild/bin/_objs/helloworld/helloworld.o: undefined reference to symbol 'puts@@GLIBC_2.2.5'
 /usr/bin/ld: external/fedora_syslibs+/libc.so.6: error adding symbols: DSO missing from command line
 collect2: error: ld returned 1 exit status

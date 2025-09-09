@@ -1,6 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-GCC_VERSION = "15.0.1"
+GCC_VERSION = "15.2.0"
 
 SUITE_TARGET = "x86_64-pc-linux-gnu"
 
@@ -37,10 +37,10 @@ filegroup(
         "lib/libc.so.6",
         "lib/libm.so",
         "lib/libm.so.6",
-	"lib/libmvec.so",
-	"lib/libmvec.so.1",
+	    "lib/libmvec.so",
+	    "lib/libmvec.so.1",
         "lib/libc_nonshared.a",
-        "lib64/ld-linux-x86-64.so.2",
+        "lib/ld-linux-x86-64.so.2",
         TARGET_LIB_DIR + "libgcc_s.so",
         TARGET_LIB_DIR + "libgcc_s.so.1",
         TARGET_LIB_DIR + "libstdc++.so",

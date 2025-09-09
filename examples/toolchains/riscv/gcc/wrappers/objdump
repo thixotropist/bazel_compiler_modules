@@ -1,4 +1,4 @@
 #!/bin/bash
 set -euo pipefail
 LD_LIBRARY_PATH=external/fedora_syslibs+ \
-  external/gcc_riscv_suite+/riscv64-unknown-linux-gnu/bin/objdump "$@"
+  external/gcc_riscv_suite+/bin/riscv64-linux-gnu-objdump "$@"

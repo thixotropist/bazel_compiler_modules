@@ -6,7 +6,7 @@
 OUTPUT_FORMAT("elf64-littleriscv", "elf64-littleriscv", "elf64-littleriscv")
 OUTPUT_ARCH(riscv)
 ENTRY(_start)
-SEARCH_DIR("external/gcc_riscv_suite+/riscv64-unknown-linux-gnu/lib"); SEARCH_DIR("external/gcc_riscv_suite+/lib");
+SEARCH_DIR("external/gcc_riscv_suite+/riscv64-linux-gnu/lib"); SEARCH_DIR("external/gcc_riscv_suite+/lib");
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */

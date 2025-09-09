@@ -1,14 +1,12 @@
 package(default_visibility = ["//visibility:public"])
 
-GCC_VERSION = "15.0.1"
+GCC_VERSION = "15.2.0"
 
-SUITE_TARGET = "riscv64-unknown-linux-gnu"
+SUITE_TARGET = "riscv64-linux-gnu"
 
 TARGET_INC_DIR = SUITE_TARGET + "/include/"
 
 TARGET_LIB_DIR = SUITE_TARGET + "/lib/"
-
-TARGET_BIN_DIR = SUITE_TARGET + "/bin/"
 
 BIN_TARGET_PREFIX = "bin/" + SUITE_TARGET + "-"
 
@@ -30,7 +28,7 @@ filegroup(
 filegroup(
     name = "lib",
     srcs = glob(["lib/gcc/{}/{}/**".format(SUITE_TARGET, GCC_VERSION)]) + [
-        "lib/gcc/crt1.o",
+        "lib/crt1.o",
         "lib/crti.o",
         "lib/crtn.o",
         "lib/libc.so",
@@ -57,14 +55,14 @@ filegroup(
     name = "compiler_files",
     srcs = [
         # binutils files
-        TARGET_BIN_DIR + "ar",
-        TARGET_BIN_DIR + "as",
-        TARGET_BIN_DIR + "ld",
-        TARGET_BIN_DIR + "ld.bfd",
-        TARGET_BIN_DIR + "objdump",
-        TARGET_BIN_DIR + "ranlib",
-        TARGET_BIN_DIR + "readelf",
-        TARGET_BIN_DIR + "strip",
+        BIN_TARGET_PREFIX + "ar",
+        BIN_TARGET_PREFIX + "as",
+        BIN_TARGET_PREFIX + "ld",
+        BIN_TARGET_PREFIX + "ld.bfd",
+        BIN_TARGET_PREFIX + "objdump",
+        BIN_TARGET_PREFIX + "ranlib",
+        BIN_TARGET_PREFIX + "readelf",
+        BIN_TARGET_PREFIX + "strip",
         # compiler files
         BIN_TARGET_PREFIX + "cpp",
         BIN_TARGET_PREFIX + "gcc",
