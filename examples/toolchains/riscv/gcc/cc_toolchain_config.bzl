@@ -57,8 +57,8 @@ SYSTEM_INCLUDE_FLAGS = [
     "-isystem" + PATH_TO_MODULE + "/lib/gcc/" + SUITE_TARGET + "/" + SUITE_VERSION + "/include-fixed",
     "-isystem" + PATH_TO_MODULE + "/lib/gcc/" + SUITE_TARGET + "/" + SUITE_VERSION + "/include",
     "-isystem" + PATH_TO_MODULE + "/" + SUITE_TARGET + "/include/c++/" + SUITE_VERSION,
+    "-isystem" + PATH_TO_MODULE + "/usr/include/" + SUITE_TARGET,
     "-isystem" + PATH_TO_MODULE + "/usr/include",
-    "-isystem" + PATH_TO_MODULE + "/include",
 ]
 
 # Generate the set of sandbox filesystem directories that might be found as dependencies after 'gcc -MD -MF ... helloworld.d'
@@ -67,10 +67,9 @@ SYSTEM_INCLUDE_DIRS = [
     PATH_TO_MODULE + "/lib/gcc/" + SUITE_TARGET + "/" + SUITE_VERSION + "/include-fixed",
     PATH_TO_MODULE + "/lib/gcc/" + SUITE_TARGET + "/" + SUITE_VERSION + "/include",
     PATH_TO_MODULE + "/" + SUITE_TARGET + "/" + "/include/c++/" + SUITE_VERSION,
-    PATH_TO_MODULE + "/usr/include",
-    PATH_TO_MODULE + "/usr/include/bits",
-    PATH_TO_MODULE + "/include",
+    PATH_TO_MODULE + "/usr/include/" + SUITE_TARGET,
     PATH_TO_MODULE + "/" + SUITE_TARGET + "/sys-include",
+    PATH_TO_MODULE + "/usr/include",
 ]
 
 # generate the structure implementing cc_toolchain_config

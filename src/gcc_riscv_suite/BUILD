@@ -1,6 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 GCC_VERSION = "15.2.0"
+GCC_MAJOR_VERSION = "15"
 
 SUITE_TARGET = "riscv64-linux-gnu"
 
@@ -15,8 +16,8 @@ BIN_TARGET_PREFIX = "bin/" + SUITE_TARGET + "-"
 filegroup(
     name = "std_includes",
     srcs = glob([
+        "lib/gcc/{}/{}/**".format(SUITE_TARGET, GCC_VERSION),
         "usr/include/**",
-        "include/**",
     ]),
 )
 

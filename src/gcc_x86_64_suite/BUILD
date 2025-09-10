@@ -1,10 +1,11 @@
 package(default_visibility = ["//visibility:public"])
 
 GCC_VERSION = "15.2.0"
+GCC_MAJOR_VERSION = "15"
 
 SUITE_TARGET = "x86_64-pc-linux-gnu"
 
-TARGET_INC_DIR = "include/"
+TARGET_INC_DIR = "usr/include/"
 
 TARGET_LIB_DIR = "lib64/"
 
@@ -17,8 +18,8 @@ BIN_TARGET_PREFIX = "bin/"
 filegroup(
     name = "std_includes",
     srcs = glob([
+        "lib/gcc/{}/{}/**".format(SUITE_TARGET, GCC_VERSION),
         "usr/include/**",
-        "include/**",
     ]),
 )
 
@@ -51,7 +52,7 @@ filegroup(
 
 filegroup(
     name = "c++_std_includes",
-    srcs = glob([TARGET_INC_DIR + "c++/{}/**".format(GCC_VERSION)]),
+    srcs = glob([TARGET_INC_DIR + "c++/{}/**".format(GCC_MAJOR_VERSION)]),
 )
 
 # Note that binutils executables have a different naming convention and location than GCC executables

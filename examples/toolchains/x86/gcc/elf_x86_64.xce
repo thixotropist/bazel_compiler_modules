@@ -205,7 +205,7 @@ SECTIONS
       *(.lbss .lbss.* .gnu.linkonce.lb.*)
       *(LARGE_COMMON)
     }
-    . = ALIGN(64 / 8);
+  . = ALIGN(64 / 8);
   /* Start of the Large Data region.  */
   . = SEGMENT_START("ldata-segment", .);
   .lrodata   ALIGN(CONSTANT (MAXPAGESIZE)) + (. & (CONSTANT (MAXPAGESIZE) - 1)) :

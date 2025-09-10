@@ -16,10 +16,7 @@ RSYNC_FILES= f"""
 + usr
 + usr/include
 + usr/include/**
-
 - usr/**
-+ include
-+ include/**
 
 # binaries used within the toolchain, running on the host and generating or manipulating
 # binaries on the target architecture.
@@ -83,6 +80,7 @@ RSYNC_FILES= f"""
 - libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/lto1
 - libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/lto-wrapper
 + libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/**
++ libexec/gcc/{MOD_TARGET}/15.0.1/liblto_plugin.so
 
 + {MOD_TARGET}
 + {MOD_TARGET}/bin
@@ -154,8 +152,7 @@ bin/{TARGET_PREFIX}readelf
 bin/{TARGET_PREFIX}size
 bin/{TARGET_PREFIX}strings
 bin/{TARGET_PREFIX}strip
-lib/gcc/{MOD_TARGET}/{GCC_VERSION}/plugin/libcc1plugin.so.0.0.0
-lib/gcc/{MOD_TARGET}/{GCC_VERSION}/plugin/libcp1plugin.so.0.0.0
+lib/gcc/{MOD_TARGET}/15.0.1/plugin/libcp1plugin.so.0.0.0
 lib/libinproctrace.so
 lib/libmvec.so.1
 lib/libanl.so.1
@@ -174,7 +171,7 @@ lib/libresolv.so.2
 lib/librt.so.1
 lib/libthread_db.so.1
 lib/libutil.so.1
-lib/ld-linux-x86-64.so.2
+lib64/ld-linux-x86-64.so.2
 lib64/libasan.so.8.0.0
 lib64/libatomic.so.1.2.0
 lib64/libcc1.so.0.0.0
@@ -185,7 +182,7 @@ lib64/libhwasan.so.0.0.0
 lib64/liblsan.so.0.0.0
 lib64/libssp.so.0.0.0
 lib64/libubsan.so.1.0.0
-libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/liblto_plugin.so
+libexec/gcc/{MOD_TARGET}/15.0.1/liblto_plugin.so
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/cc1
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/cc1plus
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/collect2

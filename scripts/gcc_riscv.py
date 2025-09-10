@@ -18,8 +18,6 @@ RSYNC_FILES= f"""
 + usr/include
 + usr/include/**
 - usr/**
-+ include
-+ include/**
 
 # binaries used within the toolchain, running on the host and generating or manipulating
 # binaries on the target architecture.
@@ -66,6 +64,7 @@ RSYNC_FILES= f"""
 
 # lib64, excluding compiler support libraries and .a archives
 + lib64
++ lib64/libcc1.so.0.0.0
 + lib64/**
 
 # libexec other files needed by the compiler toolchain
@@ -139,7 +138,6 @@ bin/{TARGET_PREFIX}readelf
 bin/{TARGET_PREFIX}size
 bin/{TARGET_PREFIX}strings
 bin/{TARGET_PREFIX}strip
-lib64/libcc1.so.0.0.0
 lib/gcc/{MOD_TARGET}/{GCC_VERSION}/plugin/libcc1plugin.so.0.0.0
 lib/gcc/{MOD_TARGET}/{GCC_VERSION}/plugin/libcp1plugin.so.0.0.0
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/liblto_plugin.so
@@ -148,7 +146,6 @@ libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/cc1plus
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/collect2
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/g++-mapper-server
 """
-
 STRIP_TARGET_FILES = f"""lib/libm.so.6
 lib/libc.so.6
 lib/libpthread.so.0

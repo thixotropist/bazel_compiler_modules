@@ -41,8 +41,9 @@ all_compile_actions = [
 # These should match a dependency named in MODULE.bazel
 SUITE_MODULE = "gcc_x86_64_suite"
 
-# This is the gcc version, not the bazel gcc_x86_64_suite module version
+# These apply to the gcc version, not the bazel gcc_x86_64_suite module version
 SUITE_VERSION = "15.2.0"
+SUITE_MAJOR_VERSION = "15"
 
 # the binutils, gcc, and glibc configuration target
 SUITE_TARGET = "x86_64-pc-linux-gnu"
@@ -56,9 +57,9 @@ PATH_TO_MODULE = OUTPUT_BASE + "/external/" + SUITE_MODULE + "+"
 SYSTEM_INCLUDE_FLAGS = [
     "-isystem" + PATH_TO_MODULE + "/lib/gcc/" + SUITE_TARGET + "/" + SUITE_VERSION + "/include-fixed",
     "-isystem" + PATH_TO_MODULE + "/lib/gcc/" + SUITE_TARGET + "/" + SUITE_VERSION + "/include",
-    "-isystem" + PATH_TO_MODULE + "/" + "/include/c++/" + SUITE_VERSION,
+    "-isystem" + PATH_TO_MODULE + "/usr/include/c++/" + SUITE_MAJOR_VERSION + "/" + SUITE_TARGET,
+    "-isystem" + PATH_TO_MODULE + "/usr/include/c++/" + SUITE_MAJOR_VERSION,
     "-isystem" + PATH_TO_MODULE + "/usr/include",
-    "-isystem" + PATH_TO_MODULE + "/include",
 ]
 
 # Generate the set of sandbox filesystem directories that might be found as dependencies after 'gcc -MD -MF ... helloworld.d'
@@ -66,11 +67,9 @@ SYSTEM_INCLUDE_FLAGS = [
 SYSTEM_INCLUDE_DIRS = [
     PATH_TO_MODULE + "/lib/gcc/" + SUITE_TARGET + "/" + SUITE_VERSION + "/include-fixed",
     PATH_TO_MODULE + "/lib/gcc/" + SUITE_TARGET + "/" + SUITE_VERSION + "/include",
-    PATH_TO_MODULE + "/" + SUITE_TARGET + "/" + "/include/c++/" + SUITE_VERSION,
+    PATH_TO_MODULE + "/usr/include/c++/" + SUITE_MAJOR_VERSION + "/" + SUITE_TARGET,
+    PATH_TO_MODULE + "/usr/include/c++/" + SUITE_MAJOR_VERSION,
     PATH_TO_MODULE + "/usr/include",
-    PATH_TO_MODULE + "/usr/include/bits",
-    PATH_TO_MODULE + "/include",
-    PATH_TO_MODULE + "/" + SUITE_TARGET + "/sys-include",
 ]
 
 # generate the structure implementing cc_toolchain_config
