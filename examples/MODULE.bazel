@@ -1,12 +1,10 @@
 module(
     name = "bazel_compiler_modules_examples",
-    version = "0.2",
+    version = "0.3",
 )
 
-bazel_dep(name="gcc_riscv_suite", version="15.2.0.0")
-bazel_dep(name="gcc_x86_64_suite", version="15.2.0.0")
-# The two gcc crosscompiler suites depend on the following for sharable object libraries
-bazel_dep(name="fedora_syslibs", version="42.0.0")
+bazel_dep(name="gcc_riscv_suite", version="15.2.0.1")
+bazel_dep(name="gcc_x86_64_suite", version="15.0.1.1")
 
 register_toolchains(
     # currently gcc-riscv64 with most of the rva23 extensions (vector, bit manipulation, ...)

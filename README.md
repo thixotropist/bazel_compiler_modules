@@ -156,37 +156,45 @@ to a single-platform sysroot.
 
 ## System Library Dependencies
 
-The host crosscompiler components expect to find a number of shared libraries at runtime.  If we want a portable
-toolchain, we need those to be found in a portable system Bazel module, not from the local host system.
+Crosscompiler components expect to find a number of shared libraries at runtime.  If we want a portable
+toolchain, we need to either provide these libraries separately or rebuild the crosscompiler for diverse host development
+platforms.
 
-For example, the compiler component `cc1` depends on these system libraries at specific versions:
+We can survey these dependencies with commands like:
 
-* libisl.so.15.1.1
-* libmpc.so.3
-* libmpfr.so.6
-* libgmp.so.10
-* libzstd.so.1
-* libstdc++.so.6
-* libm.so.6
-* libgcc_s.so.1
-* libc.so.6
-
-These versions are those found on a Fedora 42 workstation at the time the compiler suites were built.
-We need to package these as a Bazel module and register that module as a dependency of any compiler suites
-built together.  
-
-```py
-bazel_dep(name="fedora_syslibs", version="42.0.0")
+```console
+$ for i in bin/riscv64-linux-gnu-ar bin/riscv64-linux-gnu-as bin/riscv64-linux-gnu-gcc bin/riscv64-linux-gnu-g++ \
+           bin/riscv64-linux-gnu-cpp bin/riscv64-linux-gnu-ld bin/riscv64-linux-gnu-nm bin/riscv64-linux-gnu-objcopy \
+           bin/riscv64-linux-gnu-objdump bin/riscv64-linux-gnu-strip \
+           libexec/gcc/riscv64-linux-gnu/15.2.0/collect2 libexec/gcc/riscv64-linux-gnu/15.2.0/cc1plus;
+  do ldd $i >> /tmp/ldd.log;
+  done
 ```
 
-Each of the toolchain wrappers should use these libraries.  For example, `toolchains/riscv/gcc-risc/imported/gcc`:
+After some cleanup we get the aggregate dependencies:
 
-```bash
-#!/bin/bash
-set -euo pipefail
-LD_LIBRARY_PATH=external/fedora_syslibs+ \
-  external/gcc_riscv_suite+/bin/riscv64-linux-gnu-gcc "$@"
+```text
+/lib64/ld-linux-x86-64.so.2
+linux-vdso.so.1
+libc.so.6 => /lib64/libc.so.6
+libgcc_s.so.1 => /lib64/libgcc_s.so.1
+libm.so.6 => /lib64/libm.so.6
+libstdc++.so.6 => /lib64/libstdc++.so.6
+libgmp.so.10 => /lib64/libgmp.so.10
+libisl.so.15 => /lib64/libisl.so.15
+libmpc.so.3 => /lib64/libmpc.so.3
+libmpfr.so.6 => /lib64/libmpfr.so.6
+libzstd.so.1 => /lib64/libzstd.so.1
 ```
+
+If we wanted to run this on an Ubuntu 24 development host we would likely run into a problem with `libisl`.
+Fedora builds with SONAME (Sharable Object Name) 15, while Ubuntu names it 23.  This will be a problem if we
+expect to crosscompile C++ RISC-V code on both Fedora and Ubuntu development hosts as well as a continuous integration
+server.  The full solution is out of scope for this project.
+
+A quick and dirty patch simply copies /lib64/libisl.so.15 and libisl.so.15.1.1 from the fedora system to /usr/lib/x86_64-linux-gnu/ on the Ubuntu system.  This allows compilation to complete, but generates a more local error:
+
+`external/gcc_riscv_suite+/bin/../libexec/gcc/riscv64-linux-gnu/15.2.0/ld: cannot find crt1.o: No such file or directory`
 
 ## TODO
 

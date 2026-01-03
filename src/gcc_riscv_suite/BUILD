@@ -71,7 +71,5 @@ filegroup(
         ":lib",
         ":libexec",
         ":std_includes",
-        # system sharable libraries used by compiler
-        "@fedora_syslibs//:common_compiler_ldd_dependencies",
     ],
 )

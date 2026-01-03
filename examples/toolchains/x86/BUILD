@@ -7,7 +7,7 @@ package(default_visibility = ["//visibility:public"])
 SUITE_MODULE = "gcc_x86_64_suite"
 
 # This is the gcc version, not the bazel gcc_x86_64_suite module version
-SUITE_VERSION = "15.2.0"
+SUITE_VERSION = "15.0.1"
 
 # the binutils, gcc, and glibc configuration target
 SUITE_TARGET = "x86_64-pc-linux-gnu"

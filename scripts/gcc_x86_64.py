@@ -5,8 +5,8 @@ Convert an x86_64 compiler suite into a Bazel module
 from compiler_suite_generator import Generator
 
 MOD_NAME = "gcc_x86_64_suite"
-MOD_VERSION = "15.2.0.0"
-GCC_VERSION = "15.2.0"
+MOD_VERSION = "15.0.1.1"
+GCC_VERSION = "15.0.1"
 MOD_TARGET = "x86_64-pc-linux-gnu"
 # crosscompilers often need a prefix, native compilers often don't
 TARGET_PREFIX = ""
@@ -17,6 +17,13 @@ RSYNC_FILES= f"""
 + usr/include
 + usr/include/**
 - usr/**
++ include/
++ include/stdlib.h
++ include/bits/
++ include/bits/stdlib.h
++ include/c++/
++ include/c++/{GCC_VERSION}
++ include/c++/{GCC_VERSION}/**
 
 # binaries used within the toolchain, running on the host and generating or manipulating
 # binaries on the target architecture.
@@ -80,7 +87,6 @@ RSYNC_FILES= f"""
 - libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/lto1
 - libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/lto-wrapper
 + libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/**
-+ libexec/gcc/{MOD_TARGET}/15.0.1/liblto_plugin.so
 
 + {MOD_TARGET}
 + {MOD_TARGET}/bin
@@ -152,7 +158,6 @@ bin/{TARGET_PREFIX}readelf
 bin/{TARGET_PREFIX}size
 bin/{TARGET_PREFIX}strings
 bin/{TARGET_PREFIX}strip
-lib/gcc/{MOD_TARGET}/15.0.1/plugin/libcp1plugin.so.0.0.0
 lib/libinproctrace.so
 lib/libmvec.so.1
 lib/libanl.so.1
@@ -182,7 +187,7 @@ lib64/libhwasan.so.0.0.0
 lib64/liblsan.so.0.0.0
 lib64/libssp.so.0.0.0
 lib64/libubsan.so.1.0.0
-libexec/gcc/{MOD_TARGET}/15.0.1/liblto_plugin.so
+libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/liblto_plugin.so
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/cc1
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/cc1plus
 libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/collect2
@@ -199,7 +204,7 @@ libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/g++-mapper-server
 """
 # some files need to be stripped with the target-specific stripper...
 #   but probably not if the host and target architectures are both x86_64
-STRIP_TARGET_FILES = f"""lib/libm.so.6
+STRIP_TARGET_FILES = """lib/libm.so.6
 lib/libc.so.6
 lib/libpthread.so.0
 """

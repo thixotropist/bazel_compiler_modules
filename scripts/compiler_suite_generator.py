@@ -116,10 +116,10 @@ class Generator():
         into the bzlmod repository
         """
         pathlib.Path(self.bzlmod_module_dir).mkdir(parents=True, exist_ok=True)
- 
+
         module_file = f"{self.mod_src_dir}/MODULE.bazel"
         #shutil.copy(module_file, f"{self.tarball_src_dir}/MODULE.bazel")
-        print("copying Bazel MODULE.bazel files from " + 
+        print("copying Bazel MODULE.bazel files from " +
               f"{self.mod_src_dir} to {self.bzlmod_module_dir}")
         shutil.copy(module_file, f"{self.bzlmod_module_dir}/MODULE.bazel")
 

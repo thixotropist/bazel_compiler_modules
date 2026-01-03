@@ -4,7 +4,7 @@
 startup --output_base=/run/user/1000/bazel
 
 # Enable toolchain resolution explicitly, since we only have C and C++ Linux targets on Linux, no MacOS or Android
-build --incompatible_enable_cc_toolchain_resolution 
+build --incompatible_enable_cc_toolchain_resolution
 # Allow for local caching of imported packages
 build --distdir=/opt/bazel/distdir
 # Add global registry

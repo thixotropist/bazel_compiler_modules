@@ -1,11 +1,11 @@
 package(default_visibility = ["//visibility:public"])
 
-GCC_VERSION = "15.2.0"
+GCC_VERSION = "15.0.1"
 GCC_MAJOR_VERSION = "15"
 
 SUITE_TARGET = "x86_64-pc-linux-gnu"
 
-TARGET_INC_DIR = "usr/include/"
+TARGET_INC_DIR = "include/"
 
 TARGET_LIB_DIR = "lib64/"
 
@@ -41,7 +41,7 @@ filegroup(
 	    "lib/libmvec.so",
 	    "lib/libmvec.so.1",
         "lib/libc_nonshared.a",
-        "lib/ld-linux-x86-64.so.2",
+        "lib64/ld-linux-x86-64.so.2",
         TARGET_LIB_DIR + "libgcc_s.so",
         TARGET_LIB_DIR + "libgcc_s.so.1",
         TARGET_LIB_DIR + "libstdc++.so",
@@ -52,7 +52,9 @@ filegroup(
 
 filegroup(
     name = "c++_std_includes",
-    srcs = glob([TARGET_INC_DIR + "c++/{}/**".format(GCC_MAJOR_VERSION)]),
+    srcs = glob([TARGET_INC_DIR + "c++/{}/**".format(GCC_VERSION)]) +
+        glob([TARGET_INC_DIR + "bits/**"]) +
+        [TARGET_INC_DIR + "stdlib.h",],
 )
 
 # Note that binutils executables have a different naming convention and location than GCC executables
@@ -75,7 +77,5 @@ filegroup(
         ":lib",
         ":libexec",
         ":std_includes",
-        # system sharable libraries used by compiler
-        "@fedora_syslibs//:common_compiler_ldd_dependencies",
     ],
 )

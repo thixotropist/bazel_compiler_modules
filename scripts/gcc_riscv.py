@@ -2,11 +2,11 @@
 """
 Convert a riscv compiler suite into a Bazel module
 """
-from compiler_suite_generator import Generator
 import os
+from compiler_suite_generator import Generator
 
 MOD_NAME = "gcc_riscv_suite"
-MOD_VERSION = "15.2.0.0"
+MOD_VERSION = "15.2.0.1"
 GCC_VERSION = "15.2.0"
 MOD_TARGET = "riscv64-linux-gnu"
 # crosscompilers often need a prefix, native compilers often don't
@@ -18,6 +18,10 @@ RSYNC_FILES= f"""
 + usr/include
 + usr/include/**
 - usr/**
++ usr/lib/{TARGET_PREFIX}/crt1.o
++ usr/lib/{TARGET_PREFIX}/crti.o
++ usr/lib/{TARGET_PREFIX}/crtn.o
++ usr/lib/{TARGET_PREFIX}/gcrt1.o
 
 # binaries used within the toolchain, running on the host and generating or manipulating
 # binaries on the target architecture.
@@ -171,9 +175,9 @@ generator.remove_duplicates()
 # gcc first looks for the assembler and linker at libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/
 FILES=f"src/{MOD_NAME}"
 for file in ('as', 'ar', 'ld', 'cpp', 'nm', 'ranlib', 'strip'):
-    src = f"{FILES}/bin/{MOD_TARGET}-{file}"
-    dst = f"{FILES}/libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/{file}"
-    os.link(src, dst)
-    print(f"Added a hard link from binutils utility into the GCC search path:\n\t{src}⇒ {dst}")
+    SRC = f"{FILES}/bin/{MOD_TARGET}-{file}"
+    DST = f"{FILES}/libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/{file}"
+    os.link(SRC, DST)
+    print(f"Added a hard link from binutils utility into the GCC search path:\n\t{SRC}⇒ {DST}")
 
 generator.make_tarball()

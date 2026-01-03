@@ -1,4 +1,3 @@
 #!/bin/bash
 set -euo pipefail
-LD_LIBRARY_PATH=external/fedora_syslibs+ \
-  external/gcc_x86_64_suite+/bin/objcopy "$@"
+external/gcc_x86_64_suite+/bin/objcopy "$@"
