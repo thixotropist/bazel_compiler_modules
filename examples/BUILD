@@ -1,3 +1,4 @@
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
 
 # Build a simple HelloWorld RISCV-64 C executable
 cc_binary(

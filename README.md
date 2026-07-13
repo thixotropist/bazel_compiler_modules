@@ -196,6 +196,14 @@ A quick and dirty patch simply copies /lib64/libisl.so.15 and libisl.so.15.1.1 f
 
 `external/gcc_riscv_suite+/bin/../libexec/gcc/riscv64-linux-gnu/15.2.0/ld: cannot find crt1.o: No such file or directory`
 
+## Bazel configuration and versioning
+
+This repository currently depends on Bazel version 9.  The integration tests use `bazelisk` to launch `bazel`, consulting the file `.bazelversion` to select the bazel version.
+The Bazel toolchain configuration infrastructure is often refactored at major versions, often forcing minor updates to bazel load paths.  This mostly affects
+files like `examples/toolchains/**/BUILD` and `examples/toolchains/**/cc_toolchain_config.bzl`.
+
+The latest Bazel version tested here is version `9.1.1`.  The `.bazelversion` requests the latest version available in the `9.x.x` series.
+
 ## TODO
 
 * [] Test with more complex compilations
