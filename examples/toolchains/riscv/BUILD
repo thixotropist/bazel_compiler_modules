@@ -53,7 +53,7 @@ filegroup(
 # multiple machine architecture toolchain definitions
 cc_toolchain_config(
     name = "riscv64-rva23-gcc-config",
-    march = "rv64gcv_zfhmin_zvfhmin_zvbb_zicond_zimop_zcmop_zcb_zfa_zawrs_zvkng_zvksg",
+    march = "rv64gvh_zba_zbb_zbc_zbs_zicsr_zicntr_zihpm_zicbom_zicboz_zicbop_zfh_zvfh_zfhmin_zvfhmin_zcmop_zcb_zfa_zawrs_zvkng_zvksg",
 )
 
 cc_toolchain(
