@@ -1,7 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
-GCC_VERSION = "15.2.0"
-GCC_MAJOR_VERSION = "15"
+GCC_VERSION = "16.1.0"
+GCC_MAJOR_VERSION = "16"
 
 SUITE_TARGET = "riscv64-linux-gnu"
 
@@ -37,12 +37,20 @@ filegroup(
         "lib/libm.so",
         "lib/libm.so.6",
         "lib/libc_nonshared.a",
+        "lib/libpthread.so.0",
+        "lib/librt.so.1",
+        "lib/libutil.so.1",
         "lib/ld-linux-riscv64-lp64d.so.1",
         TARGET_LIB_DIR + "libgcc_s.so",
         TARGET_LIB_DIR + "libgcc_s.so.1",
+        TARGET_LIB_DIR + "libgcc_s_asneeded.so",
+        TARGET_LIB_DIR + "libatomic.so",
+        TARGET_LIB_DIR + "libatomic.so.1",
+        TARGET_LIB_DIR + "libatomic.so.1.2.0",
+        TARGET_LIB_DIR + "libatomic_asneeded.so",
         TARGET_LIB_DIR + "libstdc++.so",
         TARGET_LIB_DIR + "libstdc++.so.6",
-        TARGET_LIB_DIR + "libstdc++.so.6.0.34",
+        TARGET_LIB_DIR + "libstdc++.so.6.0.35",
     ],
 )
 

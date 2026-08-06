@@ -6,8 +6,8 @@ import os
 from compiler_suite_generator import Generator
 
 MOD_NAME = "gcc_riscv_suite"
-MOD_VERSION = "15.2.0.1"
-GCC_VERSION = "15.2.0"
+MOD_VERSION = "16.1.0.1"
+GCC_VERSION = "16.1.0"
 MOD_TARGET = "riscv64-linux-gnu"
 # crosscompilers often need a prefix, native compilers often don't
 TARGET_PREFIX = "riscv64-linux-gnu-"
@@ -95,7 +95,7 @@ RSYNC_FILES= f"""
 + {MOD_TARGET}/lib/liblsan.so.0.0.0
 + {MOD_TARGET}/lib/libstdc++.so
 + {MOD_TARGET}/lib/libstdc++.so.6
-+ {MOD_TARGET}/lib/libstdc++.so.6.0.34
++ {MOD_TARGET}/lib/libstdc++.so.6.0.35
 + {MOD_TARGET}/lib/libssp.so
 + {MOD_TARGET}/lib/libssp.so.0
 + {MOD_TARGET}/lib/libssp.so.0.0.0
@@ -153,20 +153,22 @@ libexec/gcc/{MOD_TARGET}/{GCC_VERSION}/g++-mapper-server
 STRIP_TARGET_FILES = f"""lib/libm.so.6
 lib/libc.so.6
 lib/libpthread.so.0
+lib/librt.so.1
+lib/libutil.so.1
 {MOD_TARGET}/lib/libgcc_s.so.1
 {MOD_TARGET}/lib/libasan.so.8.0.0
 {MOD_TARGET}/lib/libatomic.so.1.2.0
 {MOD_TARGET}/lib/liblsan.so.0.0.0
 {MOD_TARGET}/lib/libssp.so.0.0.0
-{MOD_TARGET}/lib/libstdc++.so.6.0.34
+{MOD_TARGET}/lib/libstdc++.so.6.0.35
 {MOD_TARGET}/lib/libtsan.so.2.0.0
 {MOD_TARGET}/lib/libubsan.so.1.0.0
 """
 
 generator = Generator(MOD_NAME, MOD_VERSION, MOD_TARGET)
-generator.set_target_prefix(f"/opt/riscv/sysroot/bin/{TARGET_PREFIX}")
+generator.set_target_prefix(f"/opt/riscv/bin/{TARGET_PREFIX}")
 generator.clean_mod_src()
-generator.rsync_to_mod_src("/opt/riscv/sysroot", RSYNC_FILES)
+generator.rsync_to_mod_src("/opt/riscv", RSYNC_FILES)
 generator.copy_bazel_files()
 generator.strip_binaries(STRIP_FILES)
 generator.strip_target_binaries(STRIP_TARGET_FILES)
