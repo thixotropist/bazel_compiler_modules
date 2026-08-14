@@ -6,8 +6,8 @@ import os
 from compiler_suite_generator import Generator
 
 MOD_NAME = "gcc_riscv_suite"
-MOD_VERSION = "16.1.0.1"
-GCC_VERSION = "16.1.0"
+MOD_VERSION = "16.2.0.1"
+GCC_VERSION = "16.2.0"
 MOD_TARGET = "riscv64-linux-gnu"
 # crosscompilers often need a prefix, native compilers often don't
 TARGET_PREFIX = "riscv64-linux-gnu-"

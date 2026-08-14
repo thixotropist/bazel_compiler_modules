@@ -1,6 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-GCC_VERSION = "16.1.0"
+GCC_VERSION = "16.2.0"
 GCC_MAJOR_VERSION = "16"
 
 SUITE_TARGET = "riscv64-linux-gnu"

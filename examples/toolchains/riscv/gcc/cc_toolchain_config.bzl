@@ -44,7 +44,7 @@ all_compile_actions = [
 SUITE_MODULE = "gcc_riscv_suite"
 
 # This is the gcc version, not the bazel gcc_riscv_suite module version
-SUITE_VERSION = "16.1.0"
+SUITE_VERSION = "16.2.0"
 
 # the binutils, gcc, and glibc configuration target
 SUITE_TARGET = "riscv64-linux-gnu"
