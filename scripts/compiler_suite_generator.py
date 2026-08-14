@@ -67,7 +67,7 @@ class Generator():
     def set_target_prefix(self, prefix):
         """
         The target prefix is the path prefix for common tools like gcc,
-        for instance "/opt/riscv/sysroot/bin/riscv64-unknown-linux-gnu-"
+        for instance "/opt/riscv/bin/riscv64-unknown-linux-gnu-"
         """
         self.target_prefix = prefix
 

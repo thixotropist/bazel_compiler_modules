@@ -8,7 +8,7 @@ package(default_visibility = ["//visibility:public"])
 SUITE_MODULE = "gcc_riscv_suite"
 
 # This is the gcc version, not the bazel gcc_riscv_suite module version
-SUITE_VERSION = "15.2.0"
+SUITE_VERSION = "16.2.0"
 
 # the binutils, gcc, and glibc configuration target
 SUITE_TARGET = "riscv64-linux-gnu"
@@ -53,7 +53,7 @@ filegroup(
 # multiple machine architecture toolchain definitions
 cc_toolchain_config(
     name = "riscv64-rva23-gcc-config",
-    march = "rv64gcv_zfhmin_zvfhmin_zvbb_zicond_zimop_zcmop_zcb_zfa_zawrs_zvkng_zvksg",
+    march = "rv64gvh_zba_zbb_zbc_zbs_zicsr_zicntr_zihpm_zicbom_zicboz_zicbop_zfh_zvfh_zfhmin_zvfhmin_zcmop_zcb_zfa_zawrs_zvkng_zvksg",
 )
 
 cc_toolchain(
